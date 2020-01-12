@@ -22,19 +22,46 @@ router.get('/tasks/all',function(req, res, next){
 });
 
 //GET ONE
-router.get('/tasks/one/:id',function(req, res, next){
+router.get('/tasks/one',function(req, res, next){
 	mongojs.connect(url	,function(err,out){
 		if(err)
 			res.send(err);
 
 		var dbs = out.db('cron');
+		var out = dbs.collection("user").find({"_id":ObjectId(5e1b563d5bc40e21d8626820)});
+		res.send(out);
+	});
+});
 
-		dbs.collection("user").find({_id:ObjectId('5d9a2a0687d4dd24781c3b91')}, function (err,result){
-			if(err)
-				res.send(err);
-			res.send('nudes');
-			res.send(result.name);
-		});
+router.get('/tasks/insertOne',function(req, res, inp){
+	mongojs.connect(url, function(err, conn){
+		if(err)
+			res.send(err);
+
+		var dbs= conn.db('cron');
+		dbs.collection('user').insertOne({"name":"Anjali"});
+		res.send('inserted');
+	})
+});
+
+router.get('/tasks/updateOne', function(req, res, inp){
+	mongojs.connect(url, function(err, conn){
+		if(err)
+			res.send(err);
+		var dbs = conn.db('cron');
+		dbs.collection('user').updateOne({'name':'Anjali'},{$set:{'name':'Anjani'}});
+		res.send('updated');
+	});
+});
+
+router.get('/tasks/deleteOne', function(req, res, inp){
+	mongojs.connect(url, function(err, conn){
+		if(err)
+			res,send(err);
+		var dbs = conn.db('cron');
+
+		dbs.collection('user'). deleteOne({'name':'Anjani'});
+		res.send('deleted');
 	});
 });
 
